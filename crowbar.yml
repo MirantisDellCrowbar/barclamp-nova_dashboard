@@ -38,6 +38,12 @@ debs:
     pkgs:
       - python-django-horizon
       - python-django-nose
+  ubuntu-12.10:
+    repos:
+      - deb http://ubuntu-cloud.archive.canonical.com/ubuntu quantal-updates/folsom main
+    pkgs:
+      - python-django-horizon
+      - python-django-nose
   pkgs:
     - openstack-dashboard
     - python-django
