@@ -4,6 +4,10 @@
     SetEnv APACHE_RUN_USER www-data
     SetEnv APACHE_RUN_GROUP www-data
     WSGIProcessGroup horizon
+    <% if @virtualenv %>
+    # For work with virtualenv
+    WSGIPythonHome <%= @virtualenv %>
+    <% end %>
 
     DocumentRoot <%= @horizon_dir %>/.blackhole/
     Alias /media <%= @horizon_dir %>/openstack_dashboard/static

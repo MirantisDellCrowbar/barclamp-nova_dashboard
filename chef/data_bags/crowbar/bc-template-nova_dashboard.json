@@ -10,6 +10,7 @@
       "git_instance": "",
       "git_refspec": "grizzly-1",
       "use_gitbarclamp": true,
+      "use_virtualenv": true,
       "use_pip_cache": true,
       "pfs_deps": [
         "nodejs",

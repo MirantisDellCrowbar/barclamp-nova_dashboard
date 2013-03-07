@@ -20,6 +20,8 @@ include_recipe "apache2::mod_rewrite"
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
 dashboard_path = "/usr/share/openstack-dashboard"
+venv_path = node[:cinder][:use_virtualenv] ? "#{dashboard_path}/.venv" : nil
+venv_prefix = node[:cinder][:use_virtualenv] ? ". #{dashboard_path}/bin/activate &&" : nil
 
 unless node[:nova_dashboard][:use_gitrepo]
   # Explicitly added client dependencies for now.
@@ -39,6 +41,7 @@ unless node[:nova_dashboard][:use_gitrepo]
 else
   pfs_and_install_deps "nova_dashboard" do
     path dashboard_path
+    virtualenv venv_path
   end
   execute "chown_www-data" do
     command "chown -R www-data:www-data #{dashboard_path}"
@@ -67,7 +70,10 @@ end
 template "#{node[:apache][:dir]}/sites-available/nova-dashboard.conf" do
   source "nova-dashboard.conf.erb"
   mode 0644
-  variables :horizon_dir => dashboard_path 
+  variables ({
+      :horizon_dir => dashboard_path,
+      :virtualenv => venv_path
+  })
   if ::File.symlink?("#{node[:apache][:dir]}/sites-enabled/nova-dashboard.conf")
     notifies :reload, resources(:service => "apache2")
   end
@@ -156,8 +162,9 @@ end
 
 if node[:nova_dashboard][:use_gitrepo]
   pfs_and_install_deps "keystone" do
-    cookbook "keystone"
     cnode keystone
+    path File.join(dashboard_path,"keystone")
+    virtualenv venv_path
   end
 end
 
