@@ -162,6 +162,7 @@ end
 
 if node[:nova_dashboard][:use_gitrepo]
   pfs_and_install_deps "keystone" do
+    cookbook "keystone"
     cnode keystone
     path File.join(dashboard_path,"keystone")
     virtualenv venv_path
@@ -176,7 +177,7 @@ Chef::Log.info("Keystone server found at #{keystone_address}")
 execute "python manage.py syncdb" do
   cwd dashboard_path
   environment ({'PYTHONPATH' => dashboard_path})
-  command "python manage.py syncdb --noinput"
+  command "#{venv_prefix}python manage.py syncdb --noinput"
   user "www-data"
   action :nothing
   notifies :restart, resources(:service => "apache2"), :immediately
