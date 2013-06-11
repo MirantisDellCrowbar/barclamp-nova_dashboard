@@ -144,6 +144,7 @@ class NovaDashboardService < ServiceObject
     end
 
     #enable public iface on horizon node
+    net_svc = NetworkService.new @logger
     all_nodes.each do |n|
       net_svc.allocate_ip "default", "public", "host", n
     end
