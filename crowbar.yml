@@ -106,4 +106,4 @@ locale_additions:
           deployment: Deployment
 
 git_repo:
-  - nova_dashboard https://github.com/openstack/horizon.git 2013.2.b2
+  - nova_dashboard https://github.com/openstack/horizon.git 2013.2.b3
